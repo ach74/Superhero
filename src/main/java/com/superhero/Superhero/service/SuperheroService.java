@@ -30,12 +30,16 @@ public class SuperheroService {
     @ExecutionTime
     @Cacheable(value = "superheroes", key = "#name")
     public List<Superhero> getSuperheroesByName(String name) {
-        return superheroRepository.findByNameContainingIgnoreCase(name);
+        try{
+            return superheroRepository.findByNameContainingIgnoreCase(name);
+        }catch(Exception e){
+            throw new RuntimeException("Error during superhero search by name: " + e.getMessage(), e);        
+        }
     }
 
 
     @ExecutionTime
-    @CacheEvict(value = "superheroes", allEntries = true)
+    @CacheEvict(value = "superheroes")
     public Superhero createSuperhero(Superhero superhero) {
         try {
             return superheroRepository.save(superhero);
@@ -45,7 +49,7 @@ public class SuperheroService {
     }
 
     @ExecutionTime
-    @CacheEvict(value = "superheroes", allEntries = true)
+    @CacheEvict(value = "superheroes")
     public Superhero updateSuperhero(Long id, Superhero updatedSuperhero) {
 
         Optional<Superhero> optionalSuperhero = superheroRepository.findById(id);
@@ -60,8 +64,13 @@ public class SuperheroService {
     }
 
     @ExecutionTime
+    @CacheEvict(value = "superheroes")
     public Optional<Superhero> getSuperheroesById(Long id) {
-        return superheroRepository.findById(id);
+        if (superheroRepository.existsById(id)) {
+            return superheroRepository.findById(id);
+        }else{
+            throw new EntityNotFoundException("Superhero not found with id: " + id);
+        }
     }
 
     @ExecutionTime
