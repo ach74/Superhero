@@ -30,7 +30,7 @@ El proyecto sigue una estructura típica de aplicación Spring Boot:
 
 ## Instrucciones de Uso con docker
 1. Clona el repositorio.
-2. Ejecuta en -> `docker build -t superhero-app .`
-3. Y por ultimo para levanta la imagen docker -> `docker run -p 8090:8090 superhero-app`
+2. Ejecuta en CMD : `docker build -t superhero-app .`
+3. Ejecuta por ultimo para levanta la imagen docker : `docker run -p 8090:8090 superhero-app`
 
 
